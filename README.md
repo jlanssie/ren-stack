@@ -36,20 +36,9 @@ Add static files such as scripts, css, favicon, apple-touch-icon, static html pa
 
 ### 7. Start Node service
 
+
 ## Improvements
 
 Possible improvements inculde 
 
 - a CMS interface to save data to a database and server.js file interaction with this database to generate templates, stored in Redis.
-
-## Bugs and Issues
-
-Have a bug or an issue with this website? Leave a comment on Github.
-
-## Creator
-
-This website was created by and is maintained by **Jeremy Lanssiers**.
-
-## Copyright and License
-
-Copyright 2018 Jeremy Lanssiers. Code released under the Github license.
