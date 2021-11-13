@@ -13,6 +13,7 @@ The NodeJS app contains several files:
 ### 1. Install dependencies
 
 Node
+
 NPM +
 - compression
 - cookie-parser
