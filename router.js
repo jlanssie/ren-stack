@@ -17,8 +17,8 @@ const { getDate, logOutput, logError } = require('./logger');
 // CONTENT
 //--------------------
 
-const pagetitle = "Jeremy Lanssiers";
-const pagedescription = "Digital home of Jeremy Lanssiers";
+const pagetitle = "";
+const pagedescription = "";
 
 
 //--------------------
