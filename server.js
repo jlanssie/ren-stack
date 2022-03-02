@@ -203,10 +203,8 @@ app.use('/', function (req, res, next) {
 // SERVER
 //--------------------
 
-const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(port);
 httpsServer.listen(secureport);
 
 logOutput("Node server started");
