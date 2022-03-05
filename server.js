@@ -158,6 +158,12 @@ app.use(function (req, res, next) {
 	next();
 });
 
+app.use(function (req, res, next) {
+	res.set('Cache-control', 'public, max-age=299');
+ 	next();
+})
+
+
 // Static resources
 
 const options = {
