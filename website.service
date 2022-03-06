@@ -1,0 +1,22 @@
+# FUNCTION: Daemon for a web application (example for mywebsite.com)
+# ARGUMENTS: none
+# AUTHOR: Jeremy Lanssiers
+# COPYRIGHT: 2021 GNU
+# REQUIRES:
+
+[Unit]
+Description=start mywebsite.com node server
+After=network.target
+
+[Service]
+Environment=NODE_PORT=2222
+Type=simple
+User=myuser
+ExecStart=/usr/bin/node server 
+WorkingDirectory=/home/myuser
+Restart=on-failure
+StandardOutput=file:/home/myuser/logs/st-out.log
+StandardError=file:/home/myuser/logs/st-err.log
+
+[Install]
+WantedBy=multi-user.target

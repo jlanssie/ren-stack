@@ -34,67 +34,32 @@ router.get('/', function (req, res) {
 	let url = req.url;
 	let nonce = req.const.nonce;
 
-	var promise = function(req, res) {
+	const publicRoot = req.const.publicRoot;
+	const client = req.const.client;
+	const cachelifespan = req.const.cachelifespan;
+	    	
+    try {
+    	client.get(url, function (err, value) {
 
-		let id = req.ip;
-		let url = req.url;
-		let nonce = req.const.nonce;
+			// If value exists for key, send value
+			// Else render requested URL, store in Redis and send
 
-		const publicRoot = req.const.publicRoot;
-		const client = req.const.client;
-		const cachelifespan = req.const.cachelifespan;
+			let redisHTML = JSON.parse(value);
+			redisHTML = redisHTML.replace("nonceValue", nonce);
+			res.send(redisHTML);
 
-		let redisResponse = false;
-		const waitingTime = 1000;
+			logOutput(id, url, "Request served by Redis");
 
-		return new Promise((resolve, reject) => {
-		    setTimeout(
-		    	function() {
-		    		if (!redisResponse) { 
-			    		reject("timeout");
-					};
-		    	}, 
-		    waitingTime);
-		    	
-		    client.get(url, function (err, value) {
-
-				redisResponse = true;
-
-				if (err) throw "Redis error";
-
-				// If value exists for key, send value
-				// Else render requested URL, store in Redis and send
-
-				if (value) {
-					let redisHTML = JSON.parse(value);
-					redisHTML = redisHTML.replace("nonceValue", nonce);
-					res.send(redisHTML);
-
-					logOutput(id, url, "Request served by Redis");
-				} else {
-					res.render('home', { title: pagetitle, description: pagedescription, nonce: 'nonceValue' }, function(err, html) {
-						client.setex(url, cachelifespan, JSON.stringify(html));
-						html = html.replace("nonceValue", nonce);
-						res.send(html);
-						
-						logOutput(id, url, "Request served by Node");
-					});
-				}
-			});
-		    
 		});
-	}
-
-	promise(req, res).catch(err=> {
-		logError(id, url, "Redis error",err) 
-
-		res.render('home', { title: pagetitle, description: pagedescription, nonce: 'nonceValue' }, function(err, html) {
+    } catch {
+    	res.render('home', { title: pagetitle, description: pagedescription, nonce: 'nonceValue' }, function(err, html) {
+			client.setex(url, cachelifespan, JSON.stringify(html));
 			html = html.replace("nonceValue", nonce);
 			res.send(html);
+			
+			logOutput(id, url, "Request served by Node");
 		});
-
-		logOutput(id, url, "Request served by Node");
-	});
+    }
 
 	let responseTimerEnd = new Date().getTime();
 	let responseTime = responseTimerEnd - responseTimerStart;
